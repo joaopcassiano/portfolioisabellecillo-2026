@@ -17,7 +17,7 @@ export default function App() {
     // Sinaliza que o JavaScript assumiu a página (algumas animações só escondem conteúdo depois disso)
     document.documentElement.classList.add("pronto");
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const lenis = new Lenis({ lerp: 0.1, anchors: { offset: -88 } });
+    const lenis = new Lenis({ lerp: 0.085, anchors: { offset: -88 } });
     scroller.lenis = lenis;
     lenis.on("scroll", ScrollTrigger.update);
     const tick = (time: number) => lenis.raf(time * 1000);

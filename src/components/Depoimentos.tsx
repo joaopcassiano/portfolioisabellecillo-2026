@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { mapa } from "../data/site";
 import { useDeslizar } from "../hooks/useDeslizar";
 import { useTroca } from "../hooks/useTroca";
@@ -39,7 +39,7 @@ const total = depoimentos.length;
 const INTERVALO = 3000;
 
 export default function Depoimentos() {
-  const { atual, anterior, direcao, ir } = useTroca(total, 950);
+  const { atual, anterior, direcao, ir } = useTroca(total, 850);
   const [tocando, setTocando] = useState(true);
   const [emFoco, setEmFoco] = useState(false);
   const [visivel, setVisivel] = useState(false);
@@ -81,7 +81,7 @@ export default function Depoimentos() {
         onClick={() => ir(passo)}
         className={`absolute hidden border-0 bg-marinho font-fina font-extralight text-bege transition-opacity duration-150 hover:opacity-90 ${classe}`}
       >
-        <span key={v.nome} aria-hidden="true" className="surge-suave">
+        <span key={v.nome} aria-hidden="true" className="cartao-entra inline-block" style={{ "--dir": direcao } as CSSProperties}>
           {v.nome[0]}
         </span>
       </button>
@@ -94,6 +94,7 @@ export default function Depoimentos() {
     return (
     <figure
       key={`${indice}-${saindo ? "sai" : "fica"}`}
+      style={{ "--dir": direcao } as CSSProperties}
       aria-live={saindo ? undefined : tocando && !emFoco ? "off" : "polite"}
       aria-hidden={saindo || undefined}
       className={`${classe} absolute left-0 top-0 m-0 grid h-[470px] w-[calc(100%-28px)] overflow-hidden rounded-[18px] bg-white shadow-[0_18px_44px_rgba(0,31,63,0.14)] lg:left-1/2 lg:h-[400px] lg:w-[min(760px,calc(100%-340px))] lg:-translate-x-1/2 lg:grid-cols-[minmax(0,1fr)_240px] lg:rounded-[20px] lg:shadow-[0_24px_60px_rgba(0,31,63,0.14)]`}
@@ -150,6 +151,7 @@ export default function Depoimentos() {
             setEmFoco(true);
             gestos.onTouchStart(e);
           }}
+          onTouchMove={gestos.onTouchMove}
           onTouchEnd={(e) => {
             setEmFoco(false);
             gestos.onTouchEnd(e);
@@ -159,11 +161,9 @@ export default function Depoimentos() {
           {lateral(-1, "left-[7.5%] top-10 h-80 w-[140px] rounded-2xl text-[64px] opacity-75 lg:block lg:left-0 xl:left-[96px]")}
           <div aria-hidden="true" className="absolute -right-1.5 top-[30px] h-[410px] w-10 rounded-[14px] bg-marinho opacity-45 lg:hidden" />
 
-          {/* Avançando: a página atual vira para a esquerda por cima e revela a próxima embaixo.
-              Voltando: a página anterior vira de volta por cima da atual. */}
-          {anterior !== null && direcao === 1 && figura(atual, "pagina-surge")}
-          {anterior !== null && figura(anterior, direcao === 1 ? "pagina-vira" : "pagina-some", true)}
-          {(anterior === null || direcao === -1) && figura(atual, anterior !== null ? "pagina-volta" : "")}
+          {/* Deslize: o depoimento que sai vai para um lado e o novo entra pelo outro, no sentido do gesto */}
+          {anterior !== null && figura(anterior, "desliza-sai", true)}
+          {figura(atual, anterior !== null ? "desliza-entra" : "")}
 
           {lateral(1, "right-[7.5%] top-10 h-80 w-[140px] rounded-2xl text-[64px] opacity-75 lg:block lg:right-0 xl:right-[96px]")}
           {lateral(2, "right-0 top-20 h-60 w-20 rounded-[14px] text-[40px] opacity-45 xl:block")}
@@ -180,7 +180,7 @@ export default function Depoimentos() {
           </button>
           <div aria-hidden="true" className="flex gap-2">
             {depoimentos.map((x, i) => (
-              <span key={x.nome} className={`h-2 rounded-full transition-[width] duration-200 ${i === atual ? "w-6 bg-marinho-profundo" : "w-2 bg-[#c9cbe0]"}`} />
+              <span key={x.nome} className={`h-2 rounded-full transition-[width,background-color] duration-500 ease-saida ${i === atual ? "w-6 bg-marinho-profundo" : "w-2 bg-[#c9cbe0]"}`} />
             ))}
           </div>
           <button

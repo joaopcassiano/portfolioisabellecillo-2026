@@ -382,83 +382,46 @@
 
 /* Foto nova surge por cima da anterior (que continua embaixo até ela terminar de aparecer) */
 .foto-surge {
-  animation: foto-surge 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: foto-surge 1100ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 @keyframes foto-surge {
   from {
     opacity: 0;
-    transform: scale(1.05);
-    filter: blur(6px);
+    transform: scale(1.06);
+    filter: blur(8px);
   }
 }
 
 /* Cartões da hero: o conteúdo novo desliza no sentido da troca */
 .cartao-entra {
-  animation: cartao-entra 650ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: cartao-entra 850ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 @keyframes cartao-entra {
   from {
     opacity: 0;
-    transform: translateX(calc(var(--dir, 1) * 22px));
-    filter: blur(3px);
+    transform: translateX(calc(var(--dir, 1) * 36px));
+    filter: blur(4px);
   }
 }
 
-/* Depoimentos: a página atual vira para a esquerda como numa revista, revelando a próxima */
-.pagina-vira {
-  transform-origin: left center;
-  animation: pagina-vira 950ms cubic-bezier(0.65, 0, 0.35, 1) both;
-  pointer-events: none;
+/* Depoimentos: deslize lateral. O cartão atual sai para um lado e o próximo entra pelo outro */
+.desliza-entra {
+  animation: desliza-entra 850ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
-@keyframes pagina-vira {
-  0% {
-    transform: perspective(1600px) rotateY(0deg);
-    opacity: 1;
-  }
-  70% {
-    opacity: 1;
-  }
-  100% {
-    transform: perspective(1600px) rotateY(-105deg);
-    opacity: 0;
-  }
-}
-/* Voltando: a página anterior vira de volta por cima */
-.pagina-volta {
-  transform-origin: left center;
-  animation: pagina-volta 950ms cubic-bezier(0.65, 0, 0.35, 1) both;
-}
-@keyframes pagina-volta {
-  0% {
-    transform: perspective(1600px) rotateY(-105deg);
-    opacity: 0;
-  }
-  30% {
-    opacity: 1;
-  }
-  100% {
-    transform: perspective(1600px) rotateY(0deg);
-    opacity: 1;
-  }
-}
-/* A página que fica embaixo acompanha com um leve movimento de profundidade */
-.pagina-surge {
-  animation: pagina-surge 950ms cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-@keyframes pagina-surge {
+@keyframes desliza-entra {
   from {
-    opacity: 0.35;
-    transform: scale(0.96);
+    opacity: 0;
+    transform: translateX(calc(var(--dir, 1) * 42%)) scale(0.97);
   }
 }
-.pagina-some {
-  animation: pagina-some 950ms cubic-bezier(0.22, 1, 0.36, 1) both;
+.desliza-sai {
+  animation: desliza-sai 850ms cubic-bezier(0.22, 1, 0.36, 1) both;
   pointer-events: none;
 }
-@keyframes pagina-some {
+@keyframes desliza-sai {
   to {
     opacity: 0;
-    transform: scale(0.96);
+    transform: translateX(calc(var(--dir, 1) * -42%)) scale(0.97);
   }
 }
 
