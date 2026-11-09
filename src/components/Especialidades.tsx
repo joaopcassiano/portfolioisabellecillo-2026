@@ -8,7 +8,7 @@ import { rolarAte } from "../lib/lenis";
 import Foto from "./Foto";
 import { Seta } from "./Icones";
 
-type Especialidade = { nome: string; texto: string; imagem: Imagem; alt: string; posicao: string };
+type Especialidade = { nome: string; texto: string; imagem: Imagem; alt: string; posicao: string; tamanhos?: string };
 
 const especialidades: Especialidade[] = [
   {
@@ -17,6 +17,8 @@ const especialidades: Especialidade[] = [
     imagem: fotos.campo,
     alt: "Isabelle agachada na beira do campo, atendendo um jogador de futebol sentado no gramado",
     posicao: "40% 38%",
+    // Foto horizontal numa moldura vertical: para cobrir a altura, ela aparece bem mais larga que a moldura
+    tamanhos: "(min-width: 1024px) 1000px, (min-width: 640px) 820px, 140vw",
   },
   {
     nome: "Fisioterapia traumato-ortopédica",
@@ -154,6 +156,7 @@ export default function Especialidades() {
           <Foto
             key={`antes-${fotoAnterior}`}
             imagem={especialidades[fotoAnterior].imagem}
+            tamanhos={especialidades[fotoAnterior].tamanhos}
             alt=""
             className="absolute inset-0 size-full object-cover"
             style={{ objectPosition: especialidades[fotoAnterior].posicao }}
@@ -162,6 +165,7 @@ export default function Especialidades() {
         <Foto
           key={ativa}
           imagem={a.imagem}
+          tamanhos={a.tamanhos}
           alt={a.alt}
           className={`absolute inset-0 size-full object-cover ${trocou ? "foto-surge" : ""}`}
           style={{ objectPosition: a.posicao }}

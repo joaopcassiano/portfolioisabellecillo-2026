@@ -9,6 +9,10 @@ import campoAvif860 from "../assets/campo-860.avif";
 import campoWebp860 from "../assets/campo-860.webp";
 import campoAvif from "../assets/campo-1200.avif";
 import campoWebp from "../assets/campo-1200.webp";
+import campoAvif1600 from "../assets/campo-1600.avif";
+import campoWebp1600 from "../assets/campo-1600.webp";
+import campoAvif2000 from "../assets/campo-2000.avif";
+import campoWebp2000 from "../assets/campo-2000.webp";
 import joelhoAvif480 from "../assets/joelho-480.avif";
 import joelhoWebp480 from "../assets/joelho-480.webp";
 import joelhoAvif from "../assets/joelho-683.avif";
@@ -56,7 +60,7 @@ export const hero = {
 
 export const fotos = {
   sentada: imagem([[sentadaAvif600, sentadaWebp600, 600], [sentadaAvif800, sentadaWebp800, 800], [sentadaAvif, sentadaWebp, 1000]], 1500),
-  campo: imagem([[campoAvif640, campoWebp640, 640], [campoAvif860, campoWebp860, 860], [campoAvif, campoWebp, 1200]], 800),
+  campo: imagem([[campoAvif640, campoWebp640, 640], [campoAvif860, campoWebp860, 860], [campoAvif, campoWebp, 1200], [campoAvif1600, campoWebp1600, 1600], [campoAvif2000, campoWebp2000, 2000]], 1333),
   joelho: imagem([[joelhoAvif480, joelhoWebp480, 480], [joelhoAvif, joelhoWebp, 683]], 866),
   conversa: imagem([[conversaAvif, conversaWebp, 429]], 644),
   notebook: imagem([[notebookAvif, notebookWebp, 410]], 615),

@@ -22,7 +22,7 @@ await variantes("imagens-fonte/hero-recorte.png", "hero", [600, 816]);
 
 // Fotos de atendimento
 await variantes(`${fotos}/3227f50a-b674-433e-9951-9c695ab47955-1_all_2875.jpg.jpeg`, "sentada", [600, 800, 1000]);
-await variantes(`${fotos}/fisioterapia esportiva.jpeg`, "campo", [640, 860, 1200]);
+await variantes(`${fotos}/fisioterapia esportiva.jpeg`, "campo", [640, 860, 1200, 1600, 2000]);
 await variantes(`${fotos}/Isabelle Cillo Web site (5).png`, "joelho", [480, 683]);
 await variantes(`${fotos}/Isabelle Cillo Web site (2).png`, "conversa", [429]);
 await variantes(`${fotos}/Isabelle Cillo Web site (3).png`, "notebook", [410]);
