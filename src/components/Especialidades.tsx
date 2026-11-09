@@ -44,6 +44,8 @@ const especialidades: Especialidade[] = [
 export default function Especialidades() {
   const [ativa, setAtiva] = useState(0);
   const [trocou, setTrocou] = useState(false);
+  // Foto que estava na tela antes da troca: fica embaixo enquanto a nova aparece por cima
+  const [fotoAnterior, setFotoAnterior] = useState<number | null>(null);
   const a = especialidades[ativa];
   const escopo = useRef<HTMLElement>(null);
   const fixacao = useRef<ScrollTrigger | null>(null);
@@ -52,6 +54,7 @@ export default function Especialidades() {
 
   const mostrar = (i: number) => {
     if (i === atualRef.current) return;
+    setFotoAnterior(atualRef.current);
     atualRef.current = i;
     setAtiva(i);
     setTrocou(true);
@@ -68,8 +71,13 @@ export default function Especialidades() {
           scrollTrigger: { trigger: escopo.current, start: "top 70%", once: true },
         });
         // A foto é revelada de baixo para cima, como uma cortina, enquanto volta ao tamanho normal
-        tl.fromTo(".esp-foto", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.4 }, 0)
-          .from(".esp-foto img", { scale: 1.18, duration: 1.8 }, 0)
+        tl.fromTo(
+          ".esp-foto",
+          { clipPath: "inset(100% 0% 0% 0%)" },
+          { clipPath: "inset(0% 0% 0% 0%)", duration: 1.6, ease: "power3.inOut" },
+          0,
+        )
+          .from(".esp-foto img", { scale: 1.2, duration: 2.2, ease: "power2.out" }, 0)
           .from(titulo.words, { yPercent: 105, duration: 1.1, stagger: 0.06 }, 0.15)
           .from(".esp-item", { autoAlpha: 0, y: 24, duration: 0.9, stagger: 0.07 }, 0.3)
           .from(".esp-cta", { autoAlpha: 0, y: 16, duration: 0.8 }, 0.6);
@@ -101,6 +109,12 @@ export default function Especialidades() {
     },
     { scope: escopo, dependencies: [fontes] },
   );
+
+  useEffect(() => {
+    if (fotoAnterior === null) return;
+    const id = window.setTimeout(() => setFotoAnterior(null), 950);
+    return () => window.clearTimeout(id);
+  }, [ativa, fotoAnterior]);
 
   // Com a seção fixa, escolher uma especialidade rola até o ponto dela; sem ela, só troca.
   const escolher = (i: number) => {
@@ -135,8 +149,23 @@ export default function Especialidades() {
         Como posso te ajudar
       </h2>
 
-      <div className="esp-foto min-h-[110px] max-h-[46svh] flex-1 overflow-hidden lg:max-h-none lg:min-h-0 rounded-[18px] bg-gelo lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:h-[min(660px,calc(100svh-160px))] lg:self-center lg:rounded-[20px]">
-        <Foto key={ativa} imagem={a.imagem} alt={a.alt} className={`size-full object-cover ${trocou ? "foto-troca" : ""}`} style={{ objectPosition: a.posicao }} />
+      <div className="esp-foto relative min-h-[110px] max-h-[46svh] flex-1 overflow-hidden lg:max-h-none lg:min-h-0 rounded-[18px] bg-gelo lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:h-[min(660px,calc(100svh-160px))] lg:self-center lg:rounded-[20px]">
+        {fotoAnterior !== null && (
+          <Foto
+            key={`antes-${fotoAnterior}`}
+            imagem={especialidades[fotoAnterior].imagem}
+            alt=""
+            className="absolute inset-0 size-full object-cover"
+            style={{ objectPosition: especialidades[fotoAnterior].posicao }}
+          />
+        )}
+        <Foto
+          key={ativa}
+          imagem={a.imagem}
+          alt={a.alt}
+          className={`absolute inset-0 size-full object-cover ${trocou ? "foto-surge" : ""}`}
+          style={{ objectPosition: a.posicao }}
+        />
       </div>
 
       <ul className="relative m-0 list-none border-b border-linha p-0 lg:col-start-2 lg:row-start-2">
@@ -154,19 +183,24 @@ export default function Especialidades() {
               >
                 <span
                   aria-hidden="true"
-                  className={`size-2.5 shrink-0 rounded-full ${aberta ? "bg-bege shadow-[0_0_0_4px_var(--color-off),0_0_0_5px_var(--color-lilas)]" : ""}`}
+                  className={`size-2.5 shrink-0 rounded-full bg-bege shadow-[0_0_0_4px_var(--color-off),0_0_0_5px_var(--color-lilas)] transition-[scale,opacity] duration-500 ease-saida ${aberta ? "scale-100 opacity-100" : "scale-0 opacity-0"}`}
                 />
-                <span className={`font-fina text-2xl font-light leading-[1.2] lg:text-4xl lg:leading-[1.1] ${aberta ? "text-marinho-profundo" : "text-lilas-escuro"}`}>
+                <span className={`font-fina text-2xl font-light leading-[1.2] transition-colors duration-500 lg:text-4xl lg:leading-[1.1] ${aberta ? "text-marinho-profundo" : "text-lilas-escuro"}`}>
                   {e.nome}
                 </span>
               </button>
-              <p
+              {/* O texto abre e fecha deslizando, em vez de aparecer de uma vez */}
+              <div
                 id={`especialidade-${i}`}
-                hidden={!aberta}
-                className="foto-troca m-0 mb-3.5 ml-6 -mt-1 text-[15px] leading-normal leading-relaxed text-marinho lg:mb-6 lg:ml-7 lg:-mt-1.5 lg:max-w-[520px] lg:text-[17px]"
+                aria-hidden={!aberta}
+                className={`grid transition-[grid-template-rows,opacity] duration-700 ease-saida ${aberta ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
               >
-                {e.texto}
-              </p>
+                <div className="min-h-0 overflow-hidden">
+                  <p className="m-0 mb-3.5 ml-6 text-[15px] leading-normal text-marinho lg:mb-6 lg:ml-7 lg:max-w-[520px] lg:text-[17px] lg:leading-relaxed">
+                    {e.texto}
+                  </p>
+                </div>
+              </div>
             </li>
           );
         })}

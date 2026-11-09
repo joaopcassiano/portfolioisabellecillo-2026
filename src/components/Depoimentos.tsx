@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { mapa } from "../data/site";
 import { useDeslizar } from "../hooks/useDeslizar";
+import { useTroca } from "../hooks/useTroca";
 import { Chevron, Estrelas, Pausa, Play } from "./Icones";
 
 // Avaliações reais do perfil no Google. Por privacidade, só o primeiro nome e a inicial do sobrenome.
@@ -38,7 +39,7 @@ const total = depoimentos.length;
 const INTERVALO = 3000;
 
 export default function Depoimentos() {
-  const [atual, setAtual] = useState(0);
+  const { atual, anterior, direcao, ir } = useTroca(total, 950);
   const [tocando, setTocando] = useState(true);
   const [emFoco, setEmFoco] = useState(false);
   const [visivel, setVisivel] = useState(false);
@@ -61,16 +62,14 @@ export default function Depoimentos() {
   // Troca a cada 3 segundos e para enquanto a pessoa passa o mouse, toca ou navega pelo teclado
   useEffect(() => {
     if (!tocando || emFoco || !visivel) return;
-    const id = window.setTimeout(() => setAtual((i) => (i + 1) % total), INTERVALO);
+    const id = window.setTimeout(() => ir(1), INTERVALO);
     return () => window.clearTimeout(id);
   }, [tocando, emFoco, visivel, atual]);
-  const ir = (passo: number) => setAtual((i) => (i + passo + total) % total);
   // Deslizar o dedo no cartão mostra o próximo ou o anterior
   const { gestos } = useDeslizar(
     () => ir(1),
     () => ir(-1),
   );
-  const d = depoimentos[atual];
   const vizinho = (passo: number) => depoimentos[(atual + passo + total) % total];
 
   const lateral = (passo: number, classe: string) => {
@@ -82,8 +81,43 @@ export default function Depoimentos() {
         onClick={() => ir(passo)}
         className={`absolute hidden border-0 bg-marinho font-fina font-extralight text-bege transition-opacity duration-150 hover:opacity-90 ${classe}`}
       >
-        <span aria-hidden="true">{v.nome[0]}</span>
+        <span key={v.nome} aria-hidden="true" className="surge-suave">
+          {v.nome[0]}
+        </span>
       </button>
+    );
+  };
+
+  // Uma página de depoimento; "saindo" marca a cópia que está virando para fora da tela
+  const figura = (indice: number, classe: string, saindo = false) => {
+    const dd = depoimentos[indice];
+    return (
+    <figure
+      key={`${indice}-${saindo ? "sai" : "fica"}`}
+      aria-live={saindo ? undefined : tocando && !emFoco ? "off" : "polite"}
+      aria-hidden={saindo || undefined}
+      className={`${classe} absolute left-0 top-0 m-0 grid h-[470px] w-[calc(100%-28px)] overflow-hidden rounded-[18px] bg-white shadow-[0_18px_44px_rgba(0,31,63,0.14)] lg:left-1/2 lg:h-[400px] lg:w-[min(760px,calc(100%-340px))] lg:-translate-x-1/2 lg:grid-cols-[minmax(0,1fr)_240px] lg:rounded-[20px] lg:shadow-[0_24px_60px_rgba(0,31,63,0.14)]`}
+    >
+      <div className="flex flex-col justify-between px-6 py-7 lg:px-11 lg:py-10">
+        <div className="flex flex-col gap-4 lg:gap-5">
+          <p className="m-0 font-fina text-2xl font-light leading-[1.2] lg:text-[28px]">{dd.destaque}</p>
+          <blockquote className="m-0 font-serif text-[19px] leading-[1.45] text-marinho lg:text-[21px]">“{dd.texto}”</blockquote>
+        </div>
+        <figcaption className="flex items-center gap-3">
+          <span aria-hidden="true" className="flex size-11 shrink-0 items-center justify-center rounded-full bg-marinho font-fina text-xl font-light text-bege lg:hidden">
+            {dd.nome[0]}
+          </span>
+          <span className="flex flex-col gap-0.5">
+            <span className="text-[15px] font-semibold lg:text-base">{dd.nome}</span>
+            <span className="text-[13px] text-marinho lg:text-sm">Avaliação no Google</span>
+          </span>
+        </figcaption>
+      </div>
+      <div aria-hidden="true" className="hidden flex-col items-center justify-center gap-[18px] bg-marinho text-bege lg:flex">
+        <span className="font-fina text-[140px] font-extralight leading-none">{dd.nome[0]}</span>
+        <Estrelas />
+      </div>
+    </figure>
     );
   };
 
@@ -125,31 +159,11 @@ export default function Depoimentos() {
           {lateral(-1, "left-[7.5%] top-10 h-80 w-[140px] rounded-2xl text-[64px] opacity-75 lg:block lg:left-0 xl:left-[96px]")}
           <div aria-hidden="true" className="absolute -right-1.5 top-[30px] h-[410px] w-10 rounded-[14px] bg-marinho opacity-45 lg:hidden" />
 
-          <figure
-            key={atual}
-            aria-live={tocando && !emFoco ? "off" : "polite"}
-            className="foto-troca absolute left-0 top-0 m-0 grid h-[470px] w-[calc(100%-28px)] overflow-hidden rounded-[18px] bg-white shadow-[0_18px_44px_rgba(0,31,63,0.14)] lg:left-1/2 lg:h-[400px] lg:w-[min(760px,calc(100%-340px))] lg:-translate-x-1/2 lg:grid-cols-[minmax(0,1fr)_240px] lg:rounded-[20px] lg:shadow-[0_24px_60px_rgba(0,31,63,0.14)]"
-          >
-            <div className="flex flex-col justify-between px-6 py-7 lg:px-11 lg:py-10">
-              <div className="flex flex-col gap-4 lg:gap-5">
-                <p className="m-0 font-fina text-2xl font-light leading-[1.2] lg:text-[28px]">{d.destaque}</p>
-                <blockquote className="m-0 font-serif text-[19px] leading-[1.45] text-marinho lg:text-[21px]">“{d.texto}”</blockquote>
-              </div>
-              <figcaption className="flex items-center gap-3">
-                <span aria-hidden="true" className="flex size-11 shrink-0 items-center justify-center rounded-full bg-marinho font-fina text-xl font-light text-bege lg:hidden">
-                  {d.nome[0]}
-                </span>
-                <span className="flex flex-col gap-0.5">
-                  <span className="text-[15px] font-semibold lg:text-base">{d.nome}</span>
-                  <span className="text-[13px] text-marinho lg:text-sm">Avaliação no Google</span>
-                </span>
-              </figcaption>
-            </div>
-            <div aria-hidden="true" className="hidden flex-col items-center justify-center gap-[18px] bg-marinho text-bege lg:flex">
-              <span className="font-fina text-[140px] font-extralight leading-none">{d.nome[0]}</span>
-              <Estrelas />
-            </div>
-          </figure>
+          {/* Avançando: a página atual vira para a esquerda por cima e revela a próxima embaixo.
+              Voltando: a página anterior vira de volta por cima da atual. */}
+          {anterior !== null && direcao === 1 && figura(atual, "pagina-surge")}
+          {anterior !== null && figura(anterior, direcao === 1 ? "pagina-vira" : "pagina-some", true)}
+          {(anterior === null || direcao === -1) && figura(atual, anterior !== null ? "pagina-volta" : "")}
 
           {lateral(1, "right-[7.5%] top-10 h-80 w-[140px] rounded-2xl text-[64px] opacity-75 lg:block lg:right-0 xl:right-[96px]")}
           {lateral(2, "right-0 top-20 h-60 w-20 rounded-[14px] text-[40px] opacity-45 xl:block")}

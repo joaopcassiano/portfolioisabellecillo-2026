@@ -38,7 +38,7 @@ export default function Sobre() {
         // Título sobe e a foto é revelada quando a seção chega
         gsap
           .timeline({ defaults: { ease: "expo.out" }, scrollTrigger: { trigger: escopo.current, start: "top 70%", once: true } })
-          .fromTo(".sobre-foto", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.4 }, 0)
+          .fromTo(".sobre-foto", { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.6, ease: "power3.inOut" }, 0)
           .from(titulo.words, { yPercent: 105, duration: 1.1, stagger: 0.06 }, 0.1);
 
         // A foto anda devagar dentro da moldura enquanto a página rola

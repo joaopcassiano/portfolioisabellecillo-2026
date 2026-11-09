@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { miniaturas, type Imagem } from "../data/imagens";
 import Foto from "./Foto";
 import { useDeslizar } from "../hooks/useDeslizar";
+import { useTroca } from "../hooks/useTroca";
 import { Chevron, Pausa, Play } from "./Icones";
 
 type Cartao = { rotulo: string; titulo: string; texto: string; imagem: Imagem; alt: string };
@@ -44,7 +45,7 @@ export const ABRIR_ESPECIALIDADE = "abrir-especialidade";
 const INTERVALO = 6000;
 
 export default function CartoesHero() {
-  const [atual, setAtual] = useState(0);
+  const { atual, anterior, direcao, ir } = useTroca(cartoes.length, 650);
   const [tocando, setTocando] = useState(true);
   const [emFoco, setEmFoco] = useState(false);
 
@@ -56,11 +57,10 @@ export default function CartoesHero() {
   // O tempo recomeça a cada troca, inclusive depois de um deslize ou clique nas setas
   useEffect(() => {
     if (!tocando || emFoco) return;
-    const id = window.setTimeout(() => setAtual((i) => (i + 1) % cartoes.length), INTERVALO);
+    const id = window.setTimeout(() => ir(1), INTERVALO);
     return () => window.clearTimeout(id);
   }, [tocando, emFoco, atual]);
 
-  const ir = (passo: number) => setAtual((i) => (i + passo + cartoes.length) % cartoes.length);
   // No celular, deslizar o dedo no cartão troca para o próximo ou o anterior
   const { gestos, deslizou } = useDeslizar(
     () => ir(1),
@@ -117,9 +117,14 @@ export default function CartoesHero() {
             imagem={c.imagem}
             tamanhos="104px"
             alt={c.alt}
-            className="foto-troca h-[104px] w-[88px] shrink-0 rounded-[10px] object-cover lg:h-[124px] lg:w-[104px]"
+            style={{ "--dir": direcao } as CSSProperties}
+            className={`${anterior !== null ? "cartao-entra" : ""} h-[104px] w-[88px] shrink-0 rounded-[10px] object-cover lg:h-[124px] lg:w-[104px]`}
           />
-          <div className="flex flex-col justify-between py-1 pr-1 lg:py-1.5 lg:pr-1.5">
+          <div
+            key={`texto-${atual}`}
+            style={{ "--dir": direcao, animationDelay: "60ms" } as CSSProperties}
+            className={`${anterior !== null ? "cartao-entra" : ""} flex flex-col justify-between py-1 pr-1 lg:py-1.5 lg:pr-1.5`}
+          >
             <div>
               <p className="m-0 text-xs font-medium text-bege lg:text-[13px]">{c.rotulo}</p>
               <p className="m-0 mt-0.5 font-serif text-[23px] font-medium leading-[1.05] text-off lg:mt-1 lg:text-[26px]">{c.titulo}</p>
