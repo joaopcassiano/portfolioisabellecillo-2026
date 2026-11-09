@@ -109,6 +109,24 @@
     }
   }
 
+  /* Atalho "Pular para o conteúdo": invisível até receber o foco do teclado */
+  .pular {
+    position: fixed;
+    left: 16px;
+    top: 16px;
+    z-index: 60;
+    padding: 12px 20px;
+    border-radius: 12px;
+    background: var(--color-marinho-profundo);
+    color: var(--color-off);
+    font-weight: 500;
+    transform: translateY(-150%);
+    transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .pular:focus {
+    transform: none;
+  }
+
   .so-leitor {
     position: absolute;
     width: 1px;

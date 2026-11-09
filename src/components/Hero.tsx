@@ -11,22 +11,20 @@ export default function Hero() {
   const escopo = useRef<HTMLElement>(null);
   const fontes = useFontesProntas();
 
+  // Entrada da foto, do anel e dos textos: começa assim que a página carrega,
+  // sem esperar as fontes, para a foto (o maior elemento da primeira tela) aparecer o quanto antes
   useGSAP(
     () => {
-      if (!fontes) return;
       const mm = gsap.matchMedia();
       mm.add(COM_MOVIMENTO, () => {
-        // Entrada: as letras do nome sobem de dentro de uma máscara, a foto chega logo depois
-        const nome = SplitText.create(".hero-nome", { type: "chars", mask: "chars" });
-        const entrada = gsap.timeline({ defaults: { ease: "expo.out" } });
-        entrada
-          .set(".entrada", { visibility: "visible" })
-          .from(nome.chars, { yPercent: 110, duration: 1.2, stagger: 0.035 })
-          .from(".hero-anel", { autoAlpha: 0, scale: 0.9, rotate: -40, duration: 1.6 }, 0.15)
-          .from(".hero-foto", { autoAlpha: 0, y: 70, scale: 0.97, duration: 1.4 }, 0.25)
-          .from([".hero-rotulo", ".hero-cidade"], { autoAlpha: 0, y: 12, duration: 0.9 }, 0.6)
-          .from(".hero-texto > *", { autoAlpha: 0, y: 18, duration: 0.9, stagger: 0.06 }, 0.7)
-          .from(".hero-cartoes", { autoAlpha: 0, y: 18, duration: 0.9 }, 0.85);
+        gsap
+          .timeline({ defaults: { ease: "expo.out" } })
+          .set(".entrada:not(.hero-nome)", { visibility: "visible" })
+          .from(".hero-anel", { autoAlpha: 0, scale: 0.9, rotate: -40, duration: 1.6 }, 0)
+          .from(".hero-foto", { autoAlpha: 0, y: 70, scale: 0.97, duration: 1.4 }, 0.05)
+          .from([".hero-rotulo", ".hero-cidade"], { autoAlpha: 0, y: 12, duration: 0.9 }, 0.4)
+          .from(".hero-texto > *", { autoAlpha: 0, y: 18, duration: 0.9, stagger: 0.06 }, 0.5)
+          .from(".hero-cartoes", { autoAlpha: 0, y: 18, duration: 0.9 }, 0.65);
 
         // Rolagem: a foto e o nome se afastam em velocidades diferentes, dando profundidade
         gsap
@@ -35,12 +33,26 @@ export default function Hero() {
           .to(".hero-nome", { yPercent: 60, autoAlpha: 0.15, ease: "none" }, 0)
           .to(".hero-anel", { rotate: 14, scale: 1.08, ease: "none" }, 0)
           .to(".hero-brilho", { scale: 1.25, autoAlpha: 0.4, ease: "none" }, 0);
-
-        return () => nome.revert();
       });
       // Com menos movimento, tudo aparece pronto
       mm.add("(prefers-reduced-motion: reduce)", () => {
         gsap.set(".entrada", { visibility: "visible" });
+      });
+    },
+    { scope: escopo },
+  );
+
+  // Letras do nome: sobem de dentro de uma máscara quando a fonte termina de carregar
+  // (a divisão em letras precisa da fonte certa para medir cada uma)
+  useGSAP(
+    () => {
+      if (!fontes) return;
+      const mm = gsap.matchMedia();
+      mm.add(COM_MOVIMENTO, () => {
+        const nome = SplitText.create(".hero-nome", { type: "chars", mask: "chars" });
+        gsap.set(".hero-nome", { visibility: "visible" });
+        gsap.from(nome.chars, { yPercent: 110, duration: 1.2, stagger: 0.035, ease: "expo.out" });
+        return () => nome.revert();
       });
     },
     { scope: escopo, dependencies: [fontes] },

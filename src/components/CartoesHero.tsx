@@ -73,15 +73,15 @@ export default function CartoesHero() {
       onBlur={() => setEmFoco(false)}
     >
       <div className="flex items-center gap-2.5 text-[13px] font-medium tabular-nums text-marinho lg:gap-3">
-        <button type="button" aria-label="Cartão anterior" onClick={() => ir(-1)} className="flex h-11 items-center gap-1 px-1 lg:px-1.5">
+        <button type="button" aria-label="Cartão anterior" onClick={() => ir(-1)} className="flex size-11 items-center justify-center">
           <Chevron direcao="esquerda" />
-          {`0${atual + 1}`}
         </button>
+        <span aria-hidden="true">{`0${atual + 1}`}</span>
         <div aria-hidden="true" className="h-0.5 grow overflow-hidden rounded-full bg-linha">
           <div className="h-0.5 bg-marinho-profundo transition-[width] duration-300" style={{ width: `${((atual + 1) / cartoes.length) * 100}%` }} />
         </div>
-        <button type="button" aria-label="Próximo cartão" onClick={() => ir(1)} className="flex h-11 items-center gap-1 px-1 lg:px-1.5">
-          04
+        <span aria-hidden="true">04</span>
+        <button type="button" aria-label="Próximo cartão" onClick={() => ir(1)} className="flex size-11 items-center justify-center">
           <Chevron />
         </button>
         <button
@@ -98,7 +98,6 @@ export default function CartoesHero() {
         <div aria-hidden="true" className="absolute inset-x-[18px] -bottom-2.5 hidden h-10 rounded-[14px] bg-lilas opacity-45 lg:block" />
         <a
           href="#especialidades"
-          aria-label={`${c.titulo}: ver em Como posso te ajudar`}
           onClick={(e) => {
             e.preventDefault();
             window.dispatchEvent(new CustomEvent(ABRIR_ESPECIALIDADE, { detail: atual }));
@@ -108,6 +107,7 @@ export default function CartoesHero() {
           <Foto
             key={atual}
             imagem={c.imagem}
+            tamanhos="104px"
             alt={c.alt}
             className="foto-troca h-[104px] w-[88px] shrink-0 rounded-[10px] object-cover lg:h-[124px] lg:w-[104px]"
           />
@@ -117,6 +117,7 @@ export default function CartoesHero() {
               <p className="m-0 mt-0.5 font-serif text-[23px] font-medium leading-[1.05] text-off lg:mt-1 lg:text-[26px]">{c.titulo}</p>
             </div>
             <p className="m-0 text-[13px] leading-snug text-texto-claro">{c.texto}</p>
+            <span className="so-leitor"> (ver em Como posso te ajudar)</span>
           </div>
         </a>
       </div>

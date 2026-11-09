@@ -76,7 +76,7 @@ export default function Depoimentos() {
         onClick={() => ir(passo)}
         className={`absolute hidden border-0 bg-marinho font-fina font-extralight text-bege transition-opacity duration-150 hover:opacity-90 ${classe}`}
       >
-        {v.nome[0]}
+        <span aria-hidden="true">{v.nome[0]}</span>
       </button>
     );
   };

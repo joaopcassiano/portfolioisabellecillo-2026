@@ -33,7 +33,10 @@ export default function App() {
 
   return (
     <>
-      <main>
+      <a href="#conteudo" className="pular">
+        Pular para o conteúdo
+      </a>
+      <main id="conteudo" tabIndex={-1} className="outline-none">
         <Hero />
         <Especialidades />
         <Atendimentos />

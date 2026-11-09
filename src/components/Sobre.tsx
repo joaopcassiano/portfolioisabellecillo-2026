@@ -32,7 +32,8 @@ export default function Sobre() {
       const mm = gsap.matchMedia();
       mm.add(COM_MOVIMENTO, () => {
         const titulo = SplitText.create(".sobre-titulo", { type: "words", mask: "words" });
-        const texto = SplitText.create(".sobre-texto", { type: "words" });
+        // aria "none": o parágrafo continua sendo lido normalmente, sem atributos extras
+        const texto = SplitText.create(".sobre-texto", { type: "words", aria: "none" });
 
         // Título sobe e a foto é revelada quando a seção chega
         gsap
@@ -48,8 +49,9 @@ export default function Sobre() {
         );
 
         // O texto principal se preenche palavra por palavra, no ritmo da rolagem
+        // As palavras saem de um azul acinzentado (ainda legível) e chegam ao azul-marinho
         gsap.from(texto.words, {
-          opacity: 0.16,
+          color: "#5f6c8f",
           stagger: 0.05,
           ease: "none",
           scrollTrigger: { trigger: ".sobre-texto", start: "top 82%", end: "bottom 50%", scrub: true },
