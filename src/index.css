@@ -144,6 +144,9 @@
   visibility: hidden;
   animation: aparecer 0s 3s forwards;
 }
+.com-abertura .entrada {
+  animation-delay: 5.6s;
+}
 @keyframes aparecer {
   to {
     visibility: visible;
@@ -255,10 +258,15 @@
   padding: 0 20px 56px;
 }
 
-@media (min-width: 1024px) {
+/* Layout lado a lado só a partir de 1280px: abaixo disso o texto ficaria em cima da foto */
+@media (min-width: 1280px) {
   .hero {
     --d: calc(min(100vw, 1600px) / 1440);
-    height: clamp(760px, 100svh, 940px);
+    --h: clamp(760px, 100svh, 940px);
+    /* Escala da foto, do anel e do brilho: segue a largura, mas encolhe em telas largas e baixas
+       para o rosto e os ombros caberem acima da faixa clara do pé da seção */
+    --e: min(var(--d), calc((var(--h) - 132px) / 749));
+    height: var(--h);
   }
   .hero-palco {
     position: static;
@@ -266,10 +274,10 @@
     height: auto;
   }
   .hero-brilho {
-    left: calc(50% - var(--d) * 340);
-    top: calc(132px + var(--d) * 128);
-    width: calc(var(--d) * 680);
-    height: calc(var(--d) * 680);
+    left: calc(50% - var(--e) * 340);
+    top: calc(132px + var(--e) * 128);
+    width: calc(var(--e) * 680);
+    height: calc(var(--e) * 680);
   }
   .hero-nome {
     left: 0;
@@ -304,16 +312,16 @@
     color: var(--color-marinho);
   }
   .hero-anel {
-    left: calc(50% - var(--d) * 290);
-    top: calc(132px + var(--d) * 228);
-    width: calc(var(--d) * 600);
-    height: calc(var(--d) * 470);
+    left: calc(50% - var(--e) * 290);
+    top: calc(132px + var(--e) * 228);
+    width: calc(var(--e) * 600);
+    height: calc(var(--e) * 470);
   }
   .hero-foto {
-    left: calc(50% - var(--d) * 276);
-    top: calc(132px + var(--d) * 36);
-    width: calc(var(--d) * 552);
-    height: calc(var(--d) * 829);
+    left: calc(50% - var(--e) * 276);
+    top: calc(132px + var(--e) * 36);
+    width: calc(var(--e) * 552);
+    height: calc(var(--e) * 829);
     -webkit-mask-image: linear-gradient(180deg, #000 52%, rgb(0 0 0 / 0) 86%);
     mask-image: linear-gradient(180deg, #000 52%, rgb(0 0 0 / 0) 86%);
   }
@@ -322,14 +330,14 @@
     position: absolute;
     z-index: 2;
     inset: auto 0 0 0;
-    height: 330px;
-    background: linear-gradient(180deg, rgb(247 245 240 / 0) 0%, rgb(247 245 240 / 0.85) 55%, var(--color-off) 100%);
+    height: 150px;
+    background: linear-gradient(180deg, rgb(247 245 240 / 0) 0%, rgb(247 245 240 / 0.8) 60%, var(--color-off) 100%);
   }
   .hero-texto {
     position: absolute;
     left: calc(var(--d) * 80);
     bottom: 72px;
-    width: 420px;
+    width: clamp(380px, calc(var(--d) * 420), 420px);
     max-width: none;
     margin: 0;
     padding: 0;
@@ -432,5 +440,130 @@
 @keyframes surge-suave {
   from {
     opacity: 0;
+  }
+}
+
+/* ───────────── Abertura (preloader) ─────────────
+   Um goniômetro, o instrumento que mede a amplitude de um movimento: o braço gira de 0° a 180°
+   enquanto o arco é traçado. Aparece só na primeira visita da sessão e só para quem não pediu menos movimento.
+   Se o JavaScript falhar, some sozinha depois de 5 segundos. */
+@property --g {
+  syntax: "<integer>";
+  inherits: true;
+  initial-value: 0;
+}
+.abertura {
+  display: none;
+}
+.com-abertura .abertura {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-off);
+  color: var(--color-marinho-profundo);
+  clip-path: inset(0 0 0 0);
+  animation: abertura-some 600ms ease 5s forwards;
+}
+.abertura-centro {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: abertura-giro 1300ms cubic-bezier(0.65, 0, 0.35, 1) 200ms both;
+  transition: opacity 400ms ease, transform 600ms cubic-bezier(0.76, 0, 0.24, 1);
+}
+.abertura-arco {
+  width: min(220px, 56vw);
+  height: auto;
+  overflow: visible;
+}
+.abertura-arco path,
+.abertura-arco line {
+  fill: none;
+  stroke-linecap: round;
+}
+.abertura-trilho {
+  stroke: var(--color-linha);
+  stroke-width: 1.5;
+}
+.abertura-marca {
+  stroke: var(--color-lilas);
+  stroke-width: 1.5;
+}
+.abertura-traco {
+  stroke: var(--color-lilas);
+  stroke-width: 2.5;
+  stroke-dasharray: 180;
+  animation: abertura-traco 1300ms cubic-bezier(0.65, 0, 0.35, 1) 200ms both;
+}
+.abertura-base {
+  stroke: var(--color-marinho-profundo);
+  stroke-width: 2;
+}
+.abertura-braco {
+  stroke: var(--color-marinho-profundo);
+  stroke-width: 2;
+  transform-origin: 110px 110px;
+  transform: rotate(calc(var(--g) * 1deg));
+}
+.abertura-eixo {
+  fill: var(--color-marinho-profundo);
+}
+.abertura-graus {
+  margin-top: 14px;
+  font-family: var(--font-fina);
+  font-weight: 200;
+  font-size: 44px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  counter-reset: g var(--g);
+}
+.abertura-graus::after {
+  content: counter(g) "°";
+}
+.abertura-nome {
+  margin: 22px 0 0;
+  font-family: var(--font-fina);
+  font-weight: 300;
+  font-size: 13px;
+  letter-spacing: 0.42em;
+  margin-right: -0.42em;
+  color: var(--color-marinho);
+  animation: surge-suave 700ms ease 300ms both;
+}
+.abertura.saindo {
+  animation: abertura-sobe 950ms cubic-bezier(0.76, 0, 0.24, 1) 120ms forwards;
+}
+.abertura.saindo .abertura-centro {
+  opacity: 0;
+  transform: translateY(-28px);
+}
+@keyframes abertura-giro {
+  from {
+    --g: 0;
+  }
+  to {
+    --g: 180;
+  }
+}
+@keyframes abertura-traco {
+  from {
+    stroke-dashoffset: 180;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes abertura-sobe {
+  to {
+    clip-path: inset(0 0 100% 0);
+  }
+}
+@keyframes abertura-some {
+  to {
+    opacity: 0;
+    visibility: hidden;
   }
 }

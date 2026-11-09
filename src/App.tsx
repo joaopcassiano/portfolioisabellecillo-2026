@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Lenis from "lenis";
 import { gsap, ScrollTrigger } from "./lib/gsap";
 import { scroller } from "./lib/lenis";
+import { iniciarAbertura } from "./lib/abertura";
 import Hero from "./components/Hero";
 import Especialidades from "./components/Especialidades";
 import Atendimentos from "./components/Atendimentos";
@@ -16,7 +17,10 @@ export default function App() {
   useEffect(() => {
     // Sinaliza que o JavaScript assumiu a página (algumas animações só escondem conteúdo depois disso)
     document.documentElement.classList.add("pronto");
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      iniciarAbertura();
+      return;
+    }
     const lenis = new Lenis({ lerp: 0.085, anchors: { offset: -88 } });
     scroller.lenis = lenis;
     lenis.on("scroll", ScrollTrigger.update);
@@ -24,6 +28,7 @@ export default function App() {
     gsap.ticker.add(tick);
     gsap.ticker.lagSmoothing(0);
     document.documentElement.style.scrollBehavior = "auto";
+    iniciarAbertura();
     return () => {
       gsap.ticker.remove(tick);
       lenis.destroy();

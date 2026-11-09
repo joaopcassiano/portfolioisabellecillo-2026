@@ -42,9 +42,16 @@
     <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
-    <!-- Esconde a primeira tela até a animação de entrada começar (só para quem não pediu menos movimento) -->
+    <!-- Esconde a primeira tela até a animação de entrada começar e, na primeira visita da sessão, mostra a abertura (só para quem não pediu menos movimento) -->
     <script>
-      if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("anima");
+      if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        document.documentElement.classList.add("anima");
+        var primeira = true;
+        try {
+          primeira = !sessionStorage.getItem("ic-abertura");
+        } catch (e) {}
+        if (primeira) document.documentElement.classList.add("com-abertura");
+      }
     </script>
 
     <script type="application/ld+json">
@@ -145,6 +152,24 @@
     </script>
   </head>
   <body>
+    <div id="abertura" class="abertura" aria-hidden="true">
+      <div class="abertura-centro">
+        <svg class="abertura-arco" viewBox="0 0 220 116" xmlns="http://www.w3.org/2000/svg">
+          <path class="abertura-trilho" d="M10 110 A100 100 0 0 1 210 110" />
+          <line class="abertura-marca" x1="22" y1="110" x2="30" y2="110" />
+          <line class="abertura-marca" x1="39.3" y1="39.3" x2="45" y2="45" />
+          <line class="abertura-marca" x1="110" y1="22" x2="110" y2="30" />
+          <line class="abertura-marca" x1="180.7" y1="39.3" x2="175" y2="45" />
+          <line class="abertura-marca" x1="198" y1="110" x2="190" y2="110" />
+          <path class="abertura-traco" pathLength="180" d="M10 110 A100 100 0 0 1 210 110" />
+          <line class="abertura-base" x1="110" y1="110" x2="40" y2="110" />
+          <line class="abertura-braco" x1="110" y1="110" x2="40" y2="110" />
+          <circle class="abertura-eixo" cx="110" cy="110" r="4" />
+        </svg>
+        <span class="abertura-graus"></span>
+        <p class="abertura-nome">ISABELLE CILLO</p>
+      </div>
+    </div>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
