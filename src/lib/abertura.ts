@@ -1,7 +1,7 @@
 import { scroller } from "./lenis";
 
 // Abertura (preloader) que vem pronta no HTML (index.html). Aqui só decidimos quando ela sai:
-// depois do giro de 0° a 180°, com as fontes e a foto da hero prontas (ou no máximo 3,5 s).
+// depois que a barra enche, com as fontes e a foto da hero prontas (ou no máximo 3,5 s).
 let liberar: () => void = () => {};
 /** Resolve quando a abertura começa a sair (ou logo de cara, quando ela não aparece). */
 export const aberturaSaiu = new Promise<void>((r) => (liberar = r));
@@ -24,12 +24,12 @@ export function iniciarAbertura() {
   scroller.lenis?.stop();
   html.style.overflow = "hidden";
 
-  // O giro dura 1,5 s contando do início do carregamento da página
-  const giro = esperar(Math.max(0, 1550 - performance.now()));
+  // A barra enche em cerca de 1,6 s contando do início do carregamento da página
+  const barraCheia = esperar(Math.max(0, 1650 - performance.now()));
   const foto = document.querySelector<HTMLImageElement>(".hero-foto");
   const carregou = Promise.all([document.fonts.ready, foto?.decode().catch(() => {})]);
 
-  Promise.all([giro, Promise.race([carregou, esperar(3500)])]).then(async () => {
+  Promise.all([barraCheia, Promise.race([carregou, esperar(3500)])]).then(async () => {
     el.classList.add("saindo");
     html.style.overflow = "";
     scroller.lenis?.start();

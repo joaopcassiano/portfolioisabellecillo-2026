@@ -444,14 +444,10 @@
 }
 
 /* ───────────── Abertura (preloader) ─────────────
-   Um goniômetro, o instrumento que mede a amplitude de um movimento: o braço gira de 0° a 180°
-   enquanto o arco é traçado. Aparece só na primeira visita da sessão e só para quem não pediu menos movimento.
+   Uma figura correndo, em traço fino: o movimento de volta, que é o fim de toda reabilitação.
+   A pista passa sob os pés e a barra enche enquanto a página carrega.
+   Aparece só na primeira visita da sessão e só para quem não pediu menos movimento.
    Se o JavaScript falhar, some sozinha depois de 5 segundos. */
-@property --g {
-  syntax: "<integer>";
-  inherits: true;
-  initial-value: 0;
-}
 .abertura {
   display: none;
 }
@@ -471,67 +467,93 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  animation: abertura-giro 1300ms cubic-bezier(0.65, 0, 0.35, 1) 200ms both;
   transition: opacity 400ms ease, transform 600ms cubic-bezier(0.76, 0, 0.24, 1);
+  animation: surge-suave 500ms ease both;
 }
-.abertura-arco {
-  width: min(220px, 56vw);
+.abertura-figura {
+  width: 128px;
   height: auto;
   overflow: visible;
 }
-.abertura-arco path,
-.abertura-arco line {
-  fill: none;
+.abertura-figura line {
+  stroke: var(--color-marinho-profundo);
+  stroke-width: 4.5;
   stroke-linecap: round;
 }
-.abertura-trilho {
-  stroke: var(--color-linha);
-  stroke-width: 1.5;
-}
-.abertura-marca {
-  stroke: var(--color-lilas);
-  stroke-width: 1.5;
-}
-.abertura-traco {
-  stroke: var(--color-lilas);
-  stroke-width: 2.5;
-  stroke-dasharray: 180;
-  animation: abertura-traco 1300ms cubic-bezier(0.65, 0, 0.35, 1) 200ms both;
-}
-.abertura-base {
-  stroke: var(--color-marinho-profundo);
-  stroke-width: 2;
-}
-.abertura-braco {
-  stroke: var(--color-marinho-profundo);
-  stroke-width: 2;
-  transform-origin: 110px 110px;
-  transform: rotate(calc(var(--g) * 1deg));
-}
-.abertura-eixo {
+.abertura-figura .cabeca {
   fill: var(--color-marinho-profundo);
 }
-.abertura-graus {
-  margin-top: 14px;
-  font-family: var(--font-fina);
-  font-weight: 200;
-  font-size: 44px;
-  line-height: 1;
-  font-variant-numeric: tabular-nums;
-  counter-reset: g var(--g);
+/* Passada: 0,64 s por ciclo; cada perna e cada braço giram na própria articulação */
+.corredor {
+  --passo: 640ms;
+  animation: corredor-quica calc(var(--passo) / 2) ease-in-out infinite alternate;
 }
-.abertura-graus::after {
-  content: counter(g) "°";
+.membro,
+.canela,
+.antebraco {
+  animation-duration: var(--passo);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+.perna-frente,
+.perna-tras {
+  transform-origin: 55px 76px;
+  animation-name: coxa;
+}
+.perna-frente .canela,
+.perna-tras .canela {
+  transform-origin: 55px 100px;
+  animation-name: canela;
+}
+.braco-frente,
+.braco-tras {
+  transform-origin: 60px 42px;
+  animation-name: braco;
+}
+.antebraco {
+  transform-origin: 60px 60px;
+  animation-name: antebraco;
+}
+.perna-tras,
+.perna-tras .canela,
+.braco-frente,
+.braco-frente .antebraco {
+  animation-delay: calc(var(--passo) / -2);
+}
+.braco-tras line,
+.perna-tras line {
+  stroke: var(--color-lilas-escuro);
+}
+.abertura-figura .chao {
+  stroke: var(--color-lilas);
+  stroke-width: 2;
+  stroke-dasharray: 14 10;
+  animation: pista 400ms linear infinite;
+}
+.abertura-barra {
+  position: relative;
+  width: 140px;
+  height: 2px;
+  margin-top: 26px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: var(--color-linha);
+}
+.abertura-barra span {
+  position: absolute;
+  inset: 0;
+  background: var(--color-marinho-profundo);
+  transform-origin: left;
+  animation: abertura-enche 1400ms cubic-bezier(0.65, 0, 0.35, 1) 150ms both;
 }
 .abertura-nome {
-  margin: 22px 0 0;
+  margin: 18px 0 0;
+  margin-right: -0.42em;
   font-family: var(--font-fina);
   font-weight: 300;
   font-size: 13px;
   letter-spacing: 0.42em;
-  margin-right: -0.42em;
   color: var(--color-marinho);
-  animation: surge-suave 700ms ease 300ms both;
 }
 .abertura.saindo {
   animation: abertura-sobe 950ms cubic-bezier(0.76, 0, 0.24, 1) 120ms forwards;
@@ -540,20 +562,67 @@
   opacity: 0;
   transform: translateY(-28px);
 }
-@keyframes abertura-giro {
-  from {
-    --g: 0;
+@keyframes coxa {
+  0%,
+  100% {
+    transform: rotate(-42deg);
   }
-  to {
-    --g: 180;
+  50% {
+    transform: rotate(32deg);
   }
 }
-@keyframes abertura-traco {
+@keyframes canela {
+  0%,
+  100% {
+    transform: rotate(18deg);
+  }
+  25% {
+    transform: rotate(8deg);
+  }
+  50% {
+    transform: rotate(40deg);
+  }
+  72% {
+    transform: rotate(105deg);
+  }
+}
+@keyframes braco {
+  0%,
+  100% {
+    transform: rotate(48deg);
+  }
+  50% {
+    transform: rotate(-52deg);
+  }
+}
+@keyframes antebraco {
+  0%,
+  100% {
+    transform: rotate(-70deg);
+  }
+  50% {
+    transform: rotate(-95deg);
+  }
+}
+@keyframes corredor-quica {
   from {
-    stroke-dashoffset: 180;
+    transform: translateY(2px);
   }
   to {
-    stroke-dashoffset: 0;
+    transform: translateY(-4px);
+  }
+}
+@keyframes pista {
+  to {
+    stroke-dashoffset: 24;
+  }
+}
+@keyframes abertura-enche {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
   }
 }
 @keyframes abertura-sobe {
