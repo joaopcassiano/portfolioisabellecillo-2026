@@ -1,0 +1,360 @@
+@import "tailwindcss";
+
+/* Paleta e fontes do arquivo "Cores e Fontes" da Isabelle */
+@theme {
+  --color-marinho-profundo: #001f3f;
+  --color-marinho: #1f385c;
+  --color-lilas: #9b9ece;
+  --color-lilas-escuro: #5f6c8f;
+  --color-bege: #cebba2;
+  --color-bege-escuro: #b89f7e;
+  --color-gelo: #e9f0ef;
+  --color-off: #f7f5f0;
+  --color-linha: #dddeec;
+  --color-linha-gelo: #c9d3d2;
+  --color-texto-claro: #d6d8ec;
+
+  --font-sans: "Hanken Grotesk Variable", "Hanken Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Cormorant Garamond Variable", "Cormorant Garamond", Georgia, serif;
+  --font-fina: "Jost Variable", "Jost", ui-sans-serif, system-ui, sans-serif;
+
+  --ease-saida: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 96px;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--color-off);
+    color: var(--color-marinho-profundo);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-marinho);
+    outline-offset: 4px;
+    border-radius: 8px;
+  }
+  img {
+    display: block;
+  }
+  /* As <source> do <picture> não podem virar itens de grid quando o <picture> usa display: contents */
+  source {
+    display: none;
+  }
+}
+
+@layer components {
+  /* Botões: leve redução ao tocar, como resposta ao clique */
+  .botao {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    height: 52px;
+    padding: 0 24px;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    transition: transform 140ms var(--ease-saida), background-color 160ms ease, color 160ms ease;
+  }
+  .botao:active {
+    transform: scale(0.97);
+  }
+  .botao-escuro {
+    background: var(--color-marinho-profundo);
+    color: var(--color-off);
+  }
+  .botao-bege {
+    background: var(--color-bege);
+    color: var(--color-marinho-profundo);
+    font-weight: 600;
+  }
+  .botao-contorno {
+    border: 1px solid var(--color-marinho);
+    color: var(--color-marinho-profundo);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .botao-escuro:hover {
+      background: var(--color-marinho);
+    }
+    .botao-bege:hover {
+      background: #d9c9b3;
+    }
+    .botao-contorno:hover {
+      background: rgb(31 56 92 / 0.06);
+    }
+  }
+
+  .titulo-secao {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+  }
+  @media (min-width: 1024px) {
+    .titulo-secao {
+      font-size: 56px;
+    }
+  }
+
+  .so-leitor {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+/* ───────────── Animações ─────────────
+   Os elementos da primeira tela começam escondidos e o GSAP revela. Se o JavaScript falhar,
+   eles aparecem sozinhos depois de 3 segundos. */
+.anima .entrada {
+  visibility: hidden;
+  animation: aparecer 0s 3s forwards;
+}
+@keyframes aparecer {
+  to {
+    visibility: visible;
+  }
+}
+/* Troca de foto nas especialidades: leve desfoque para suavizar a transição */
+.foto-troca {
+  animation: foto-troca 320ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+@keyframes foto-troca {
+  from {
+    opacity: 0;
+    filter: blur(4px);
+  }
+}
+
+/* ───────────── Hero ─────────────
+   No celular, as medidas seguem a prévia de 390px e crescem junto com a tela (até 600px).
+   No computador, seguem a prévia de 1440px. */
+.hero {
+  position: relative;
+  overflow: hidden;
+  --u: calc(min(100vw, 600px) / 390);
+}
+.hero-palco {
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto;
+  height: calc(var(--u) * 610);
+}
+.hero-brilho {
+  position: absolute;
+  left: calc(var(--u) * 10);
+  top: calc(var(--u) * 250);
+  width: calc(var(--u) * 370);
+  height: calc(var(--u) * 370);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--color-gelo) 0%, rgb(233 240 239 / 0) 100%);
+}
+.hero-nome {
+  position: absolute;
+  z-index: 1;
+  left: calc(var(--u) * 16);
+  right: calc(var(--u) * 16);
+  top: calc(var(--u) * 100);
+  margin: 0;
+  font-family: var(--font-fina);
+  font-weight: 200;
+  font-size: calc(var(--u) * 80);
+  line-height: 0.95;
+  white-space: nowrap;
+}
+.hero-nome span {
+  display: block;
+}
+.hero-nome span + span {
+  text-align: right;
+}
+.hero-rotulo {
+  position: absolute;
+  z-index: 1;
+  left: calc(var(--u) * 18);
+  top: calc(var(--u) * 200);
+  font-family: var(--font-fina);
+  font-weight: 300;
+  font-size: calc(var(--u) * 11);
+  letter-spacing: 0.3em;
+  color: var(--color-marinho);
+}
+.hero-cidade {
+  display: none;
+}
+.hero-anel {
+  position: absolute;
+  left: calc(var(--u) * 40);
+  top: calc(var(--u) * 330);
+  width: calc(var(--u) * 310);
+  height: calc(var(--u) * 250);
+  border: 2px solid rgb(155 158 206 / 0.6);
+  border-radius: 50%;
+  transform: rotate(-16deg);
+}
+.hero-foto {
+  position: absolute;
+  z-index: 2;
+  left: calc(var(--u) * 25);
+  top: calc(var(--u) * 212);
+  width: calc(var(--u) * 340);
+  height: calc(var(--u) * 511);
+  object-fit: contain;
+  -webkit-mask-image: linear-gradient(180deg, #000 55%, rgb(0 0 0 / 0) 92%);
+  mask-image: linear-gradient(180deg, #000 55%, rgb(0 0 0 / 0) 92%);
+}
+.hero-esmaecer {
+  display: none;
+}
+.hero-texto {
+  position: relative;
+  z-index: 3;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.hero-cartoes {
+  position: relative;
+  z-index: 3;
+  max-width: 600px;
+  margin: 34px auto 0;
+  padding: 0 20px 56px;
+}
+
+@media (min-width: 1024px) {
+  .hero {
+    --d: calc(min(100vw, 1600px) / 1440);
+    height: clamp(760px, 100svh, 940px);
+  }
+  .hero-palco {
+    position: static;
+    max-width: none;
+    height: auto;
+  }
+  .hero-brilho {
+    left: calc(50% - var(--d) * 340);
+    top: calc(132px + var(--d) * 128);
+    width: calc(var(--d) * 680);
+    height: calc(var(--d) * 680);
+  }
+  .hero-nome {
+    left: 0;
+    right: 0;
+    top: 132px;
+    text-align: center;
+    font-size: calc(var(--d) * 176);
+    line-height: 1;
+    letter-spacing: -0.01em;
+  }
+  .hero-nome span {
+    display: inline;
+  }
+  .hero-rotulo,
+  .hero-cidade {
+    top: calc(132px + var(--d) * 198);
+    font-size: clamp(13px, calc(var(--d) * 17), 18px);
+  }
+  .hero-rotulo {
+    left: calc(var(--d) * 80 + 4px);
+    letter-spacing: 0.6em;
+  }
+  .hero-cidade {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    right: calc(var(--d) * 74);
+    font-family: var(--font-fina);
+    font-weight: 300;
+    font-size: clamp(14px, calc(var(--d) * 19), 20px);
+    letter-spacing: 0.06em;
+    color: var(--color-marinho);
+  }
+  .hero-anel {
+    left: calc(50% - var(--d) * 290);
+    top: calc(132px + var(--d) * 228);
+    width: calc(var(--d) * 600);
+    height: calc(var(--d) * 470);
+  }
+  .hero-foto {
+    left: calc(50% - var(--d) * 276);
+    top: calc(132px + var(--d) * 36);
+    width: calc(var(--d) * 552);
+    height: calc(var(--d) * 829);
+    -webkit-mask-image: linear-gradient(180deg, #000 52%, rgb(0 0 0 / 0) 86%);
+    mask-image: linear-gradient(180deg, #000 52%, rgb(0 0 0 / 0) 86%);
+  }
+  .hero-esmaecer {
+    display: block;
+    position: absolute;
+    z-index: 2;
+    inset: auto 0 0 0;
+    height: 330px;
+    background: linear-gradient(180deg, rgb(247 245 240 / 0) 0%, rgb(247 245 240 / 0.85) 55%, var(--color-off) 100%);
+  }
+  .hero-texto {
+    position: absolute;
+    left: calc(var(--d) * 80);
+    bottom: 72px;
+    width: 420px;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+  .hero-cartoes {
+    position: absolute;
+    right: calc(var(--d) * 80);
+    bottom: 72px;
+    width: 400px;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* Formação: com animação ligada (e só depois que o JavaScript assume, para nada sumir se ele falhar), cada curso surge e ganha cor quando chega na tela, e continua assim */
+.anima.pronto .formacao .sobre-item-conteudo {
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 600ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 600ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.anima.pronto .formacao.ativa .sobre-item-conteudo {
+  opacity: 1;
+  transform: none;
+}
+.anima.pronto .formacao-ponto {
+  transform: scale(0);
+  transition: transform 400ms cubic-bezier(0.23, 1, 0.32, 1) 120ms;
+}
+.anima.pronto .formacao.ativa .formacao-ponto {
+  transform: scale(1);
+}
