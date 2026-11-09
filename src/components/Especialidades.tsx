@@ -16,28 +16,28 @@ const especialidades: Especialidade[] = [
     texto: "Trato e previno lesões do esporte para você voltar a treinar e competir com segurança. Na volta, acompanho você na beira do campo.",
     imagem: fotos.campo,
     alt: "Isabelle agachada na beira do campo, atendendo um jogador de futebol sentado no gramado",
-    posicao: "33% 50%",
+    posicao: "40% 38%",
   },
   {
     nome: "Fisioterapia traumato-ortopédica",
     texto: "Trato lesões e dores em músculos, ossos e articulações, com um plano pensado para o seu caso.",
     imagem: fotos.joelho,
     alt: "Isabelle examinando o joelho de um paciente",
-    posicao: "60% 30%",
+    posicao: "58% 16%",
   },
   {
     nome: "Reabilitação pós-operatória",
     texto: "Acompanho sua recuperação depois da cirurgia, do primeiro movimento até a volta à rotina.",
     imagem: fotos.equilibrio,
     alt: "Isabelle avaliando a perna de uma paciente sobre uma plataforma de equilíbrio",
-    posicao: "50% 40%",
+    posicao: "66% 14%",
   },
   {
     nome: "Fisioterapia funcional",
     texto: "Trabalho força, mobilidade e equilíbrio para você se movimentar melhor no dia a dia.",
     imagem: fotos.sentada,
     alt: "Isabelle sorrindo, sentada em uma bola de exercícios no consultório",
-    posicao: "50% 30%",
+    posicao: "50% 20%",
   },
 ];
 
@@ -78,7 +78,7 @@ export default function Especialidades() {
 
       // A seção fica parada na tela e a rolagem passa de uma especialidade para a outra.
       // Só em telas com altura para mostrar foto, lista e botão juntos.
-      mm.add(`${COM_MOVIMENTO} and (min-height: 700px)`, () => {
+      mm.add(`${COM_MOVIMENTO} and (min-height: 620px)`, () => {
         const ultimo = especialidades.length - 1;
         fixacao.current = ScrollTrigger.create({
           trigger: escopo.current,
@@ -129,13 +129,13 @@ export default function Especialidades() {
       ref={escopo}
       id="especialidades"
       aria-labelledby="especialidades-titulo"
-      className="mx-auto grid max-w-[640px] grid-cols-1 gap-5 px-5 py-8 min-h-svh content-center lg:min-h-svh lg:max-w-[1440px] lg:grid-cols-[520px_minmax(0,1fr)] lg:content-center lg:gap-x-[120px] lg:gap-y-10 lg:px-[clamp(24px,5.6vw,80px)] lg:py-20"
+      className="mx-auto flex h-[max(100svh,620px)] max-w-[640px] flex-col justify-center gap-4 px-5 py-6 lg:grid lg:h-auto lg:min-h-svh lg:max-w-[1440px] lg:grid-cols-[520px_minmax(0,1fr)] lg:content-center lg:gap-x-[120px] lg:gap-y-10 lg:px-[clamp(24px,5.6vw,80px)] lg:py-20"
     >
       <h2 id="especialidades-titulo" className="esp-titulo titulo-secao lg:col-start-2 lg:row-start-1">
         Como posso te ajudar
       </h2>
 
-      <div className="esp-foto h-[clamp(180px,26svh,340px)] overflow-hidden rounded-[18px] bg-gelo lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:h-[min(660px,calc(100svh-160px))] lg:self-center lg:rounded-[20px]">
+      <div className="esp-foto min-h-[110px] max-h-[46svh] flex-1 overflow-hidden lg:max-h-none lg:min-h-0 rounded-[18px] bg-gelo lg:col-start-1 lg:row-span-3 lg:row-start-1 lg:h-[min(660px,calc(100svh-160px))] lg:self-center lg:rounded-[20px]">
         <Foto key={ativa} imagem={a.imagem} alt={a.alt} className={`size-full object-cover ${trocou ? "foto-troca" : ""}`} style={{ objectPosition: a.posicao }} />
       </div>
 
@@ -163,7 +163,7 @@ export default function Especialidades() {
               <p
                 id={`especialidade-${i}`}
                 hidden={!aberta}
-                className="foto-troca m-0 mb-4 ml-6 -mt-1 text-base leading-relaxed text-marinho lg:mb-6 lg:ml-7 lg:-mt-1.5 lg:max-w-[520px] lg:text-[17px]"
+                className="foto-troca m-0 mb-3.5 ml-6 -mt-1 text-[15px] leading-normal leading-relaxed text-marinho lg:mb-6 lg:ml-7 lg:-mt-1.5 lg:max-w-[520px] lg:text-[17px]"
               >
                 {e.texto}
               </p>

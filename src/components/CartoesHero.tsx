@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { miniaturas, type Imagem } from "../data/imagens";
 import Foto from "./Foto";
+import { useDeslizar } from "../hooks/useDeslizar";
 import { Chevron, Pausa, Play } from "./Icones";
 
 type Cartao = { rotulo: string; titulo: string; texto: string; imagem: Imagem; alt: string };
@@ -52,13 +53,19 @@ export default function CartoesHero() {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) setTocando(false);
   }, []);
 
+  // O tempo recomeça a cada troca, inclusive depois de um deslize ou clique nas setas
   useEffect(() => {
     if (!tocando || emFoco) return;
-    const id = window.setInterval(() => setAtual((i) => (i + 1) % cartoes.length), INTERVALO);
-    return () => window.clearInterval(id);
-  }, [tocando, emFoco]);
+    const id = window.setTimeout(() => setAtual((i) => (i + 1) % cartoes.length), INTERVALO);
+    return () => window.clearTimeout(id);
+  }, [tocando, emFoco, atual]);
 
   const ir = (passo: number) => setAtual((i) => (i + passo + cartoes.length) % cartoes.length);
+  // No celular, deslizar o dedo no cartão troca para o próximo ou o anterior
+  const { gestos, deslizou } = useDeslizar(
+    () => ir(1),
+    () => ir(-1),
+  );
   const c = cartoes[atual];
 
   return (
@@ -94,12 +101,13 @@ export default function CartoesHero() {
         </button>
       </div>
 
-      <div className="relative" aria-live={tocando && !emFoco ? "off" : "polite"}>
+      <div className="relative touch-pan-y" aria-live={tocando && !emFoco ? "off" : "polite"} {...gestos}>
         <div aria-hidden="true" className="absolute inset-x-[18px] -bottom-2.5 hidden h-10 rounded-[14px] bg-lilas opacity-45 lg:block" />
         <a
           href="#especialidades"
           onClick={(e) => {
             e.preventDefault();
+            if (deslizou.current) return;
             window.dispatchEvent(new CustomEvent(ABRIR_ESPECIALIDADE, { detail: atual }));
           }}
           className="relative flex gap-3.5 rounded-2xl bg-marinho p-2 transition-transform duration-150 active:scale-[0.98] lg:gap-[18px] lg:p-2.5 lg:shadow-[0_18px_40px_rgba(0,31,63,0.18)]"

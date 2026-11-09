@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { mapa } from "../data/site";
+import { useDeslizar } from "../hooks/useDeslizar";
 import { Chevron, Estrelas, Pausa, Play } from "./Icones";
 
 // Avaliações reais do perfil no Google. Por privacidade, só o primeiro nome e a inicial do sobrenome.
@@ -64,6 +65,11 @@ export default function Depoimentos() {
     return () => window.clearTimeout(id);
   }, [tocando, emFoco, visivel, atual]);
   const ir = (passo: number) => setAtual((i) => (i + passo + total) % total);
+  // Deslizar o dedo no cartão mostra o próximo ou o anterior
+  const { gestos } = useDeslizar(
+    () => ir(1),
+    () => ir(-1),
+  );
   const d = depoimentos[atual];
   const vizinho = (passo: number) => depoimentos[(atual + passo + total) % total];
 
@@ -101,13 +107,19 @@ export default function Depoimentos() {
         </div>
 
         <div
-          className="relative h-[470px] w-full lg:h-[400px] lg:max-w-[1280px]"
+          className="relative h-[470px] w-full touch-pan-y lg:h-[400px] lg:max-w-[1280px]"
           onMouseEnter={() => setEmFoco(true)}
           onMouseLeave={() => setEmFoco(false)}
           onFocus={() => setEmFoco(true)}
           onBlur={() => setEmFoco(false)}
-          onTouchStart={() => setEmFoco(true)}
-          onTouchEnd={() => setEmFoco(false)}
+          onTouchStart={(e) => {
+            setEmFoco(true);
+            gestos.onTouchStart(e);
+          }}
+          onTouchEnd={(e) => {
+            setEmFoco(false);
+            gestos.onTouchEnd(e);
+          }}
         >
           {lateral(-2, "left-0 top-20 h-60 w-20 rounded-[14px] text-[40px] opacity-45 xl:block")}
           {lateral(-1, "left-[7.5%] top-10 h-80 w-[140px] rounded-2xl text-[64px] opacity-75 lg:block lg:left-0 xl:left-[96px]")}
