@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://isabellecillo.pages.dev/sitemap.xml
+Sitemap: https://isabellecillo.com.br/sitemap.xml
