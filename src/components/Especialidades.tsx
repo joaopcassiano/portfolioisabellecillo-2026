@@ -13,7 +13,7 @@ type Especialidade = { nome: string; texto: string; imagem: Imagem; alt: string;
 const especialidades: Especialidade[] = [
   {
     nome: "Fisioterapia esportiva",
-    texto: "Trato e previno lesões do esporte para você voltar a treinar e competir com segurança. Na volta, acompanho você na beira do campo.",
+    texto: "Trato e previno lesões do esporte para você voltar a treinar e competir com segurança. Na volta, acompanho você na beira do campo ou da quadra.",
     imagem: fotos.campo,
     alt: "Isabelle agachada na beira do campo, atendendo um jogador de futebol sentado no gramado",
     posicao: "40% 38%",
@@ -22,14 +22,14 @@ const especialidades: Especialidade[] = [
   },
   {
     nome: "Fisioterapia traumato-ortopédica",
-    texto: "Trato lesões e dores em músculos, ossos e articulações, com um plano pensado para o seu caso.",
+    texto: "Trato lesões e dores em músculos, ossos e articulações, com um plano pensado para o seu caso (como bursites, tendinites e lesões musculares).",
     imagem: fotos.joelho,
     alt: "Isabelle examinando o joelho de um paciente",
     posicao: "58% 16%",
   },
   {
     nome: "Reabilitação pós-operatória",
-    texto: "Acompanho sua recuperação depois da cirurgia, do primeiro movimento até a volta à rotina.",
+    texto: "Acompanho sua recuperação depois da cirurgia, dos primeiros cuidados até a volta à rotina.",
     imagem: fotos.equilibrio,
     alt: "Isabelle avaliando a perna de uma paciente sobre uma plataforma de equilíbrio",
     posicao: "66% 14%",

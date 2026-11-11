@@ -14,7 +14,7 @@ const etapas = [
   },
   {
     titulo: "Até a volta",
-    texto: "Acompanho você até voltar à rotina ou ao esporte, e no caso dos atletas, até a beira do campo.",
+    texto: "Acompanho você até voltar à rotina ou ao esporte, e no caso dos atletas, até a beira do campo ou da quadra.",
   },
 ];
 

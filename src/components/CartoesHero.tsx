@@ -12,7 +12,7 @@ const cartoes: Cartao[] = [
   {
     rotulo: "Especialidade",
     titulo: "Fisioterapia esportiva",
-    texto: "Cuido da lesão e estou na beira do campo na sua volta.",
+    texto: "Cuido da lesão e estou na beira do campo ou da quadra na sua volta.",
     imagem: miniaturas.campo,
     alt: "Isabelle agachada na beira do campo, atendendo um jogador de futebol",
   },
@@ -26,7 +26,7 @@ const cartoes: Cartao[] = [
   {
     rotulo: "Especialidade",
     titulo: "Pós-operatória",
-    texto: "Do primeiro movimento depois da cirurgia até a volta à rotina.",
+    texto: "Dos primeiros cuidados depois da cirurgia até a volta à rotina.",
     imagem: miniaturas.equilibrio,
     alt: "Isabelle avaliando a perna de uma paciente sobre uma plataforma de equilíbrio",
   },
