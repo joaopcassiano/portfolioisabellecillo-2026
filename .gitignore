@@ -3,3 +3,6 @@ dist
 dist-ssr
 *.local
 *.tsbuildinfo
+
+# Fotos originais em alta (cerca de 50 MB): o site usa só as versões otimizadas em src/assets
+IMAGENS/

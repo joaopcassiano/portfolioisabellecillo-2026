@@ -9,7 +9,7 @@ export default function Contato() {
       <div className="overflow-hidden rounded-[20px] bg-marinho text-off lg:grid lg:min-h-[520px] lg:grid-cols-[minmax(0,520px)_minmax(0,1fr)]">
         <div className="relative aspect-[4/3] lg:aspect-auto">
           <Foto
-            imagem={fotos.sentada}
+            imagem={fotos.contato}
             alt="Isabelle sorrindo, sentada em uma bola de exercícios no consultório"
             className="absolute inset-0 size-full object-cover object-[50%_22%]"
           />

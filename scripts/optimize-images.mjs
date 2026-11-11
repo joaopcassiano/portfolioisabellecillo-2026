@@ -1,5 +1,5 @@
 // Gera as imagens otimizadas do site (AVIF + WebP), os ícones e a imagem de compartilhamento.
-// Fontes: as fotos originais em "IMAGENS PROFISSIONAL/" e os recortes em "imagens-fonte/".
+// Fontes: as fotos novas em "IMAGENS/", a do campo em "IMAGENS PROFISSIONAL/" e os recortes em "imagens-fonte/".
 // Rode com: npm run images
 import sharp from "sharp";
 import { mkdirSync } from "node:fs";
@@ -18,23 +18,26 @@ async function variantes(src, nome, larguras) {
 }
 
 // Foto recortada da hero (fundo transparente)
-await variantes("imagens-fonte/hero-recorte.png", "hero", [600, 816]);
+await variantes("imagens-fonte/hero-recorte.png", "hero", [600, 816, 1200]);
 
-// Fotos de atendimento
-await variantes(`${fotos}/3227f50a-b674-433e-9951-9c695ab47955-1_all_2875.jpg.jpeg`, "sentada", [600, 800, 1000]);
+// Fotos de atendimento (fotos novas, em "IMAGENS/", com o nome de onde cada uma entra no site)
+const novas = "IMAGENS";
+const larguras = [600, 900, 1200];
 await variantes(`${fotos}/fisioterapia esportiva.jpeg`, "campo", [640, 860, 1200, 1600, 2000]);
-await variantes(`${fotos}/Isabelle Cillo Web site (5).png`, "joelho", [480, 683]);
-await variantes(`${fotos}/Isabelle Cillo Web site (2).png`, "conversa", [429]);
-await variantes(`${fotos}/Isabelle Cillo Web site (3).png`, "notebook", [410]);
-await variantes(`${fotos}/Isabelle Cillo Web site (4).png`, "equilibrio", [410]);
+await variantes(`${novas}/FISIOTERAPIA TRAUMATO.JPG`, "joelho", larguras);
+await variantes(`${novas}/PÓS OPERATORIA.JPG`, "equilibrio", larguras);
+await variantes(`${novas}/FISIOTERAPIA FUNCIONAL.JPG`, "sentada", larguras);
+await variantes(`${novas}/COMO É O ATENDIMENTO.JPG`, "conversa", larguras);
+await variantes(`${novas}/SOBRE MIM.JPG`, "notebook", larguras);
+await variantes(`${novas}/VAMOS CUIDAR DO SEU MOVIMENTO - Copia.JPG`, "contato", larguras);
 
 // Miniaturas dos cartões da hero (104 x 124 na tela, 2x para telas de alta densidade)
 // As mesmas fotos de "Como posso te ajudar", recortadas na Isabelle
 const miniaturas = [
   ["campo", `${fotos}/fisioterapia esportiva.jpeg`, null],
-  ["joelho", `${fotos}/Isabelle Cillo Web site (5).png`, "north"],
-  ["equilibrio", `${fotos}/Isabelle Cillo Web site (4).png`, "attention"],
-  ["sentada", `${fotos}/3227f50a-b674-433e-9951-9c695ab47955-1_all_2875.jpg.jpeg`, "north"],
+  ["joelho", `${novas}/FISIOTERAPIA TRAUMATO.JPG`, "attention"],
+  ["equilibrio", `${novas}/PÓS OPERATORIA.JPG`, "attention"],
+  ["sentada", `${novas}/FISIOTERAPIA FUNCIONAL.JPG`, "attention"],
 ];
 for (const [nome, src, posicao] of miniaturas) {
   // A foto do campo é horizontal e aberta: o recorte aproxima na Isabelle

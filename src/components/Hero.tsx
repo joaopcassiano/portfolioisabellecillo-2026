@@ -33,7 +33,8 @@ export default function Hero() {
         gsap
           .timeline({ scrollTrigger: { trigger: escopo.current, start: "top top", end: "bottom top", scrub: 0.6 } })
           .to(".hero-foto", { yPercent: 12, ease: "none" }, 0)
-          .to(".hero-nome", { yPercent: 60, autoAlpha: 0.15, ease: "none" }, 0)
+          // Valores de partida explícitos: o nome ainda está escondido (até as letras subirem) quando isto é montado
+          .fromTo(".hero-nome", { yPercent: 0, opacity: 1 }, { yPercent: 60, opacity: 0.15, ease: "none" }, 0)
           .to(".hero-anel", { rotate: 14, scale: 1.08, ease: "none" }, 0)
           .to(".hero-brilho", { scale: 1.25, autoAlpha: 0.4, ease: "none" }, 0);
       });
