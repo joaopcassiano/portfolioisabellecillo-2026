@@ -12,10 +12,10 @@ const depoimentos = [
     texto: "Ótimo atendimento! Tive excelentes resultados e voltei muito melhor após a minha cirurgia. Recomendo demais!",
   },
   {
-    nome: "Monalisa G.",
-    destaque: "Explica tudo direitinho e passa muita confiança.",
+    nome: "João Pedro C.",
+    destaque: "Estou retornando ao esporte depois de uma fratura.",
     texto:
-      "Minha experiência foi muito boa! Fui muito bem atendida, com bastante atenção e cuidado. Ela é uma profissional muito querida, explica tudo direitinho e passa muita confiança. Super recomendo!",
+      "Excelente profissional, sou paciente em tratamento de uma fratura de tíbia e fíbula e estou retornando ao esporte graças ao trabalho da Isabelle, extremamente atenciosa e com um diferencial de entender as necessidades de cada paciente e suas limitações.",
   },
   {
     nome: "Thaís M.",

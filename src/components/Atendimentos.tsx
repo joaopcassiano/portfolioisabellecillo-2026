@@ -6,7 +6,7 @@ import { Pino } from "./Icones";
 const etapas = [
   {
     titulo: "Primeira consulta",
-    texto: "Ouço sua história e avalio como você se movimenta. Depois explico o que está acontecendo e monto o seu plano de tratamento.",
+    texto: "Ouço sua história e avalio o seu caso com calma. Depois explico o que está acontecendo, qual o tempo provável de tratamento e monto um plano feito para você.",
   },
   {
     titulo: "Durante o tratamento",

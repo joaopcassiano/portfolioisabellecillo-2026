@@ -26,7 +26,7 @@ const cartoes: Cartao[] = [
   {
     rotulo: "Especialidade",
     titulo: "Pós-operatória",
-    texto: "Dos primeiros cuidados depois da cirurgia até a volta à rotina.",
+    texto: "Do primeiro passo depois da cirurgia até a volta à rotina.",
     imagem: miniaturas.equilibrio,
     alt: "Isabelle avaliando a perna de uma paciente sobre uma plataforma de equilíbrio",
   },

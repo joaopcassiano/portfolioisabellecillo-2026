@@ -29,7 +29,7 @@ const especialidades: Especialidade[] = [
   },
   {
     nome: "Reabilitação pós-operatória",
-    texto: "Acompanho sua recuperação depois da cirurgia, dos primeiros cuidados até a volta à rotina.",
+    texto: "Acompanho sua recuperação depois da cirurgia, do primeiro passo até a volta à rotina.",
     imagem: fotos.equilibrio,
     alt: "Isabelle avaliando a perna de uma paciente sobre uma plataforma de equilíbrio",
     posicao: "66% 14%",
