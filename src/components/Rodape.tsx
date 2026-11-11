@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { logos } from "../data/imagens";
 import { contato, empresa, endereco } from "../data/site";
 import { Email, Instagram, WhatsApp } from "./Icones";
 
 export default function Rodape() {
+  const [privacidade, setPrivacidade] = useState(false);
   // No celular, cada contato vira uma linha própria, separada por um fio, com o ícone num círculo
   const linkContato =
     "flex min-h-14 items-center gap-3.5 border-b border-linha text-[15px] last:border-b-0 lg:min-h-9 lg:gap-3 lg:border-b-0";
@@ -65,8 +67,30 @@ export default function Rodape() {
             <span className="hidden lg:inline">, CNPJ {empresa.cnpj}</span>.<br className="lg:hidden" /> Todos os direitos reservados.
           </p>
           <p className="m-0 tabular-nums lg:hidden">CNPJ {empresa.cnpj}</p>
-          <p className="m-0">Fisioterapeuta em Alfenas, MG</p>
+          <p className="m-0 flex flex-wrap items-center gap-x-4">
+            <span>Fisioterapeuta em Alfenas, MG</span>
+            <button
+              type="button"
+              aria-expanded={privacidade}
+              aria-controls="privacidade"
+              onClick={() => setPrivacidade((v) => !v)}
+              className="min-h-11 border-0 bg-transparent p-0 text-[13px] text-marinho underline underline-offset-4 lg:min-h-0"
+            >
+              Privacidade
+            </button>
+          </p>
         </div>
+
+        {privacidade && (
+          <div id="privacidade" className="-mt-6 max-w-[680px] text-[13px] leading-relaxed text-marinho lg:-mt-4">
+            <p className="m-0">
+              Este site não pede cadastro, não usa cookies de rastreamento e não exibe anúncios. Quando você me chama no WhatsApp ou por
+              e-mail, uso o que me enviar só para responder e cuidar do seu atendimento, com o sigilo da LGPD e da ética profissional. O mapa
+              do Google só carrega se você clicar nele, e aí vale a política de privacidade do Google. Para pedir que eu apague suas
+              informações, é só me escrever.
+            </p>
+          </div>
+        )}
       </div>
     </footer>
   );
