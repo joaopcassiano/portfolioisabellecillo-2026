@@ -33,11 +33,6 @@ export function iniciarAbertura() {
     el.classList.add("saindo");
     html.style.overflow = "";
     scroller.lenis?.start();
-    try {
-      sessionStorage.setItem("ic-abertura", "1");
-    } catch {
-      /* navegação privada: a abertura volta a aparecer na próxima visita, sem problema */
-    }
     await esperar(250);
     liberar();
     await esperar(900);

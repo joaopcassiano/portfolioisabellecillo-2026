@@ -42,15 +42,17 @@
     <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.webmanifest" />
-    <!-- Esconde a primeira tela até a animação de entrada começar e, na primeira visita da sessão, mostra a abertura (só para quem não pediu menos movimento) -->
+    <!-- Toda vez que a página carrega (inclusive no F5), ela começa do topo e mostra a abertura (só para quem não pediu menos movimento) -->
     <script>
+      if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+      try {
+        var nav = performance.getEntriesByType("navigation")[0];
+        // No F5, esquece a seção do menu (#contato etc.) para não pular de volta para ela
+        if (nav && nav.type === "reload" && location.hash) history.replaceState(null, "", location.pathname + location.search);
+      } catch (e) {}
+      if (!location.hash) window.scrollTo(0, 0);
       if (!matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        document.documentElement.classList.add("anima");
-        var primeira = true;
-        try {
-          primeira = !sessionStorage.getItem("ic-abertura");
-        } catch (e) {}
-        if (primeira) document.documentElement.classList.add("com-abertura");
+        document.documentElement.classList.add("anima", "com-abertura");
       }
     </script>
 
